@@ -1,68 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/views/home_screen/screens/home_screen.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'configs/AppTheme.dart';
+import 'configs/my_print.dart';
+import 'controllers/navigation_controller.dart';
+import 'controllers/provider/AppThemeNotifier.dart';
+
+void main() async {
+  //You will need to initialize AppThemeNotifier class for theme changes.
+        runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    MyPrint.printOnConsole("MyApp called");
+    // MySize().init(context);
+
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AppThemeNotifier>(create: (_) => AppThemeNotifier(),),
+      ],
+      child: MainApp(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+class MainApp extends StatefulWidget {
+  static late BuildContext mainContext;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MainApp> createState() => _MainAppState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MainAppState extends State<MainApp> {
+  bool isFirst = true;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    MainApp.mainContext = context;
+    MyPrint.printOnConsole("Main called");
+    return Consumer<AppThemeNotifier>(
+      builder: (BuildContext context, AppThemeNotifier value, Widget? child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.getThemeFromThemeMode(value.themeMode()),
+          onGenerateRoute: NavigationController().getMainGeneratedRoutes,
+          home: HomeScreen(),
+        );
+      },
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/views/home_screen/screens/home_screen.dart';
 
 import '../configs/my_print.dart';
 import '../views/splash_screen/screens/splashScreen.dart';
@@ -20,6 +21,11 @@ class NavigationController {
       }
       case SplashScreen.routeName:{
         widget = SplashScreen();
+        break;
+      }
+
+      case HomeScreen.routeName:{
+        widget = HomeScreen();
         break;
       }
     }
