@@ -5,6 +5,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class AppTheme {
   static final int themeLight = 1;
@@ -341,6 +342,19 @@ class AppTheme {
       ),
       cupertinoOverrideTheme: CupertinoThemeData());
 
+  static final NeumorphicThemeData neumorphicLightTheme = NeumorphicThemeData(
+    baseColor: Color(0xFFFFFFFF),
+    lightSource: LightSource.topLeft,
+    depth: 10,
+
+  );
+
+  static NeumorphicThemeData neumorphicDarkTheme = NeumorphicThemeData(
+    baseColor: Color(0xFF3E3E3E),
+    lightSource: LightSource.topLeft,
+    depth: 6,
+  );
+
   static ThemeData getThemeFromThemeMode(int themeMode) {
     if (themeMode == themeLight) {
       return lightTheme;
@@ -348,6 +362,15 @@ class AppTheme {
       return darkTheme;
     }
     return darkTheme;
+  }
+
+  static NeumorphicThemeData getThemeFromNeumorphicThemeMode(int themeMode) {
+    if (themeMode == themeLight) {
+      return neumorphicLightTheme;
+    } else if (themeMode == themeDark) {
+      return neumorphicDarkTheme;
+    }
+    return neumorphicDarkTheme;
   }
 
   static NavigationBarTheme getNavigationThemeFromMode(int themeMode) {
